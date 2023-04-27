@@ -8,7 +8,49 @@
         <title>Mini Calcuator</title>
     </head>
     <body>
-        <h1>Mini Calculator</h1>
+        <div class="h-screen grid items-center justify-center">
+            <div class="border-2 border-gray-500 shadow-2xl rounded-lg">
+                <div class="border-b-2 border-gray-500 output bg-transparent p-4 rounded-t-lg text-3xl text-right text-white w-96 h-full font-mono">
+                    <div class="previousNumber my-1 text-lg h-5 opacity-75"></div>
+                    <div class="currentNumber">0</div>
+                </div>
+                <div class="p-6 text-gray-800 grid grid-cols-4 gap-4 text-xl">
+                    <button class="font-mono col-start-1 col-end-4 bg-blue-500 hover:bg-blue-400 rounded p-5" id="clear" >C</button>
+
+                    <button class="font-mono bg-purple-500 hover:bg-purple-400 rounded p-5" id="operator">/</button>
+
+                    <button class="font-mono bg-gray-500 hover:bg-gray-400 rounded p-5" id="number">1</button>
+
+                    <button class="font-mono bg-gray-500 hover:bg-gray-400 rounded p-5" id="number">2</button>
+
+                    <button class="font-mono bg-gray-500 hover:bg-gray-400 rounded p-5" id="number">3</button>
+
+                    <button class="font-mono bg-purple-500 hover:bg-purple-400 rounded p-5" id="operator">x</button>
+                      
+                    <button class="font-mono bg-gray-500 hover:bg-gray-400 rounded p-5" id="number">4</button>
+
+                    <button class="font-mono bg-gray-500 hover:bg-gray-400 rounded p-5" id="number">5</button>
+
+                    <button class="font-mono bg-gray-500 hover:bg-gray-400 rounded p-5" id="number">6</button>
+
+                    <button class="font-mono bg-purple-500 hover:bg-purple-400 rounded p-5" id="operator">-</button>
+
+                    <button class="font-mono bg-gray-500 hover:bg-gray-400 rounded p-5" id="number">7</button>
+                      
+                    <button class="font-mono bg-gray-500 hover:bg-gray-400 rounded p-5" id="number">8</button>
+
+                    <button class="font-mono bg-gray-500 hover:bg-gray-400 rounded p-5" id="number">9</button>
+
+                    <button class="font-mono bg-purple-500 hover:bg-purple-400 rounded p-5" id="operator">+</button>
+
+                    <button class="font-mono bg-blue-500 hover:bg-blue-400 rounded p-5" id="number">0</button>
+                      
+                    <button class="font-mono bg-blue-500 hover:bg-blue-400 rounded p-5" id="decimal">.</button>
+
+                    <button class="font-mono col-start-3 col-end-5 bg-purple-500 hover:bg-purple-400 rounded p-5" id="equal">=</button>
+                </div>
+            </div>
+       </div>
     </body>
     <script src="./js/index.js"></script>
 </html>
