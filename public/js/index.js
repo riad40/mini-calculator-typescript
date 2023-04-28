@@ -31,12 +31,19 @@ class Calculator {
     chooseOperator(operator) {
         if (this.currentNumber === "")
             return;
+        if (this.operatorClicked) {
+            this.operator = operator;
+            this.prevNumber = this.prevNumber.slice(0, -1) + this.operator;
+            this.currentNumber = "0";
+            return;
+        }
         if (this.prevNumber !== "") {
             this.compute();
         }
         this.operator = operator;
         this.prevNumber = this.currentNumber + " " + this.operator;
         this.currentNumber = "0";
+        this.operatorClicked = true;
     }
     compute() {
         let computation;
@@ -64,6 +71,14 @@ class Calculator {
         this.currentNumber = computation.toString();
         this.operator = "";
         this.prevNumber = "";
+        this.operatorClicked = false;
+        // handle if the computation is a NaN
+        if (isNaN(computation)) {
+            this.currentNumber = "syntax error";
+            this.prevNumber = "";
+            this.operator = "";
+            this.operatorClicked = false;
+        }
     }
 }
 // grab the DOM elements
