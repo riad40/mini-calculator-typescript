@@ -28,6 +28,43 @@ class Calculator {
         this.currentNumberDisplayer.innerText = this.currentNumber;
         this.prevNumberDisplayer.innerText = this.prevNumber;
     }
+    chooseOperator(operator) {
+        if (this.currentNumber === "")
+            return;
+        if (this.prevNumber !== "") {
+            this.compute();
+        }
+        this.operator = operator;
+        this.prevNumber = this.currentNumber + " " + this.operator;
+        this.currentNumber = "0";
+    }
+    compute() {
+        let computation;
+        const prev = parseFloat(this.prevNumber.split(" ")[0]);
+        const current = parseFloat(this.currentNumber);
+        console.log(prev, this.operator, current);
+        if (isNaN(prev) || isNaN(current))
+            return;
+        switch (this.operator) {
+            case "+":
+                computation = prev + current;
+                break;
+            case "-":
+                computation = prev - current;
+                break;
+            case "x":
+                computation = prev * current;
+                break;
+            case "/":
+                computation = prev / current;
+                break;
+            default:
+                return;
+        }
+        this.currentNumber = computation.toString();
+        this.operator = "";
+        this.prevNumber = "";
+    }
 }
 // grab the DOM elements
 const clear = document.querySelector("#clear");
@@ -49,5 +86,17 @@ numbers.forEach((number) => {
 // clear
 clear.addEventListener("click", () => {
     calculator.clear();
+    calculator.updateDisplay();
+});
+// operators
+operators.forEach((operator) => {
+    operator.addEventListener("click", () => {
+        calculator.chooseOperator(operator.innerText);
+        calculator.updateDisplay();
+    });
+});
+// equal
+equal.addEventListener("click", () => {
+    calculator.compute();
     calculator.updateDisplay();
 });
