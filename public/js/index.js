@@ -11,15 +11,17 @@ class Calculator {
         this.currentNumberDisplayer = currentNumberDisplayer;
     }
     clear() {
-        this.currentNumber = "";
+        this.currentNumber = "0";
         this.prevNumber = "";
         this.operator = "";
-        this.operatorClicked = false;
     }
     appendNumber(number) {
-        console.log("sjdhsjfsjdgfj");
         if (number === "." && this.currentNumber.includes("."))
             return;
+        if (this.currentNumber === "0" && currentNumberDisplayer.innerText === "0") {
+            this.currentNumber = number;
+            return;
+        }
         this.currentNumber = this.currentNumber + number;
     }
     updateDisplay() {
@@ -43,4 +45,9 @@ numbers.forEach((number) => {
         calculator.appendNumber(number.innerText);
         calculator.updateDisplay();
     });
+});
+// clear
+clear.addEventListener("click", () => {
+    calculator.clear();
+    calculator.updateDisplay();
 });

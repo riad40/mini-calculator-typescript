@@ -15,15 +15,17 @@ class Calculator {
     }
 
     clear() {
-        this.currentNumber = ""
+        this.currentNumber = "0"
         this.prevNumber = ""
         this.operator = ""
-        this.operatorClicked = false
     }
 
     appendNumber(number: string) {
-        console.log("sjdhsjfsjdgfj")
         if (number === "." && this.currentNumber.includes(".")) return
+        if (this.currentNumber === "0" && currentNumberDisplayer.innerText === "0") {
+            this.currentNumber = number
+            return
+        }
         this.currentNumber = this.currentNumber + number
     }
 
@@ -52,4 +54,10 @@ numbers.forEach((number) => {
         calculator.appendNumber(number.innerText)
         calculator.updateDisplay()
     })
+})
+
+// clear
+clear.addEventListener("click", () => {
+    calculator.clear()
+    calculator.updateDisplay()
 })
