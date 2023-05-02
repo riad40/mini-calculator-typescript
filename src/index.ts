@@ -1,88 +1,89 @@
 class Calculator {
-    // Properties
+    previousOperandTextElement: HTMLDivElement
+    currentOperandTextElement: HTMLDivElement
+    currentOperand: string = ""
+    previousOperand: string = ""
+    operation: string = ""
 
-    public prevNumber: string = ""
-    public currentNumber: string = ""
-    public operator: string = ""
-    public operatorClicked: boolean = false
-    public prevNumberDisplayer: HTMLDivElement
-    public currentNumberDisplayer: HTMLDivElement
-
-    // Methods
-    constructor(previusNumberDisplayer: HTMLDivElement, currentNumberDisplayer: HTMLDivElement) {
-        this.prevNumberDisplayer = previusNumberDisplayer
-        this.currentNumberDisplayer = currentNumberDisplayer
+    constructor(previousOperandTextElement: HTMLDivElement, currentOperandTextElement: HTMLDivElement) {
+        this.previousOperandTextElement = previousOperandTextElement
+        this.currentOperandTextElement = currentOperandTextElement
+        this.clear()
     }
 
     clear() {
-        this.currentNumber = "0"
-        this.prevNumber = ""
-        this.operator = ""
+        this.currentOperand = ""
+        this.previousOperand = ""
+        this.operation = ""
     }
 
     appendNumber(number: string) {
-        if (number === "." && this.currentNumber.includes(".")) return
-        if (this.currentNumber === "0" && currentNumberDisplayer.innerText === "0") {
-            this.currentNumber = number
-            return
-        }
-        this.currentNumber = this.currentNumber + number
+        if (number === "." && this.currentOperand?.includes(".")) return
+        this.currentOperand = this.currentOperand?.toString() + number.toString()
     }
 
-    updateDisplay() {
-        this.currentNumberDisplayer.innerText = this.currentNumber
-        this.prevNumberDisplayer.innerText = this.prevNumber
+    chooseOperation(operation: string) {
+        if (this.currentOperand === "") return
+        if (this.previousOperand !== "") {
+            this.calculate()
+        }
+        this.operation = operation
+        this.previousOperand = this.currentOperand
+        this.currentOperand = ""
     }
 
-    chooseOperator(operator: string) {
-        if (this.currentNumber === "") return
-        if (this.operatorClicked) {
-            this.operator = operator
-            this.prevNumber = this.prevNumber.slice(0, -1) + this.operator
-            this.currentNumber = "0"
-            return
-        }
-        if (this.prevNumber !== "") {
-            this.compute()
-        }
-        this.operator = operator
-        this.prevNumber = this.currentNumber + " " + this.operator
-        this.currentNumber = "0"
-        this.operatorClicked = true
-    }
-
-    compute() {
+    calculate() {
         let computation
-        const prev = parseFloat(this.prevNumber.split(" ")[0])
-        const current = parseFloat(this.currentNumber)
-        console.log(prev, this.operator, current)
+        const prev = parseFloat(this.previousOperand)
+        const current = parseFloat(this.currentOperand)
         if (isNaN(prev) || isNaN(current)) return
-        switch (this.operator) {
+        switch (this.operation) {
             case "+":
                 computation = prev + current
                 break
             case "-":
                 computation = prev - current
                 break
-            case "x":
+            case "*":
                 computation = prev * current
                 break
-            case "/":
+            case "÷":
                 computation = prev / current
                 break
             default:
                 return
         }
-        this.currentNumber = computation.toString()
-        this.operator = ""
-        this.prevNumber = ""
-        this.operatorClicked = false
-        // handle if the computation is a NaN
-        if (isNaN(computation)) {
-            this.currentNumber = "syntax error"
-            this.prevNumber = ""
-            this.operator = ""
-            this.operatorClicked = false
+        const result = computation.toString()
+        this.currentOperand = result
+        this.operation = ""
+        this.previousOperand = ""
+    }
+
+    getDisplayNumber(number: string | number) {
+        const stringNumber = number.toString()
+        const integerDigits = parseFloat(stringNumber.split(".")[0])
+        const decimalDigits = stringNumber.split(".")[1]
+        let integerDisplay: string
+        if (isNaN(integerDigits)) {
+            integerDisplay = ""
+        } else {
+            integerDisplay = integerDigits.toLocaleString("en", { maximumFractionDigits: 0 })
+        }
+        if (decimalDigits != null) {
+            return `${integerDisplay}.${decimalDigits}`
+        } else {
+            return integerDisplay
+        }
+    }
+
+    updateDisplay() {
+        this.currentOperandTextElement.innerText = this.getDisplayNumber(this.currentOperand)
+        if (this.operation != null) {
+            this.previousOperandTextElement.innerText = `${this.getDisplayNumber(this.previousOperand)} ${
+                this.operation
+            }`
+        } else {
+            this.previousOperandTextElement.innerText = ""
         }
     }
 }
@@ -99,8 +100,6 @@ const currentNumberDisplayer = document.querySelector(".currentNumber") as HTMLD
 const calculator = new Calculator(previousNumberDisplayer, currentNumberDisplayer)
 
 // add event listeners to the DOM elements
-
-// numbers
 numbers.forEach((number) => {
     number.addEventListener("click", () => {
         calculator.appendNumber(number.innerText)
@@ -108,22 +107,19 @@ numbers.forEach((number) => {
     })
 })
 
-// clear
-clear.addEventListener("click", () => {
-    calculator.clear()
-    calculator.updateDisplay()
-})
-
-// operators
 operators.forEach((operator) => {
     operator.addEventListener("click", () => {
-        calculator.chooseOperator(operator.innerText)
+        calculator.chooseOperation(operator.innerText)
         calculator.updateDisplay()
     })
 })
 
-// equal
 equal.addEventListener("click", () => {
-    calculator.compute()
+    calculator.calculate()
+    calculator.updateDisplay()
+})
+
+clear.addEventListener("click", () => {
+    calculator.clear()
     calculator.updateDisplay()
 })
